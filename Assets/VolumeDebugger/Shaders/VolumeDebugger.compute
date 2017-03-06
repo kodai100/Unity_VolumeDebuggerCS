@@ -1,0 +1,24 @@
+﻿// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel CSMain
+
+#define SIMULATION_BLOCK_SIZE 40
+
+struct CellData {
+	float3 position;
+	float3 data;
+};
+
+float _Time;
+
+StructuredBuffer<CellData> _BufferRead;
+RWStructuredBuffer<CellData> _BufferWrite;
+
+[numthreads(SIMULATION_BLOCK_SIZE,1,1)]
+void CSMain (uint3 DTid : SV_DispatchThreadID) {
+
+	uint id = DTid.x;
+
+	CellData data = _BufferRead[id];
+
+	_BufferWrite[id] = data;
+}
